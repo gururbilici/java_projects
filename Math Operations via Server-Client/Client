@@ -1,0 +1,37 @@
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.EOFException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.Socket;
+import java.net.UnknownHostException;
+import java.util.Random;
+import java.util.Scanner;
+
+public class Client {
+		public static void main(String[] args) throws NumberFormatException, UnknownHostException, IOException {
+		Socket socket = new Socket("localhost", 5050);    // I created Socket whose address is localhost and whose port number is 5050 //
+		OutputStream outputStream = socket.getOutputStream(); // I created outputStream to use in DataoutputStream//
+		DataOutputStream dataOutputStream = new DataOutputStream(outputStream); // I created  dataOutputStream variable to send data to server.// 
+		InputStream inputStream = socket.getInputStream(); //I created inputStream variable to use in dataInputStream.//
+		DataInputStream dataInputStream = new DataInputStream(inputStream); // I created dataInputStream variable to read message which is sent by server.//
+       
+		System.out.println("Server: Guess the number:");
+		while(true) { // I created a loop to send data until getting "Server: Correct!" message.//                             
+		System.out.print("Client : ");	
+		Scanner sc=new Scanner(System.in); // I created sc variable to use scanner method easily.//
+		int cnumber=sc.nextInt(); // I created cnumber variable which holds user's guessing number.//
+		
+		dataOutputStream.writeUTF(String.valueOf(cnumber)); // I send cnumber  to Server.//
+		String message = dataInputStream.readUTF();	 // I print message which is sent by server.//
+		System.out.println(message);  // I print message which is sent by server.//
+		
+			if(message.equals("Server: Correct!")) { // If message is equal to "Server: Correct!" ,loop is stopped and socket is closed.//
+				socket.close();
+				break;
+			}
+
+}
+}
+}
