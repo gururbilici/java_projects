@@ -1,0 +1,106 @@
+
+import java.awt.Graphics;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.Timer;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
+
+public class Turin extends JFrame implements ActionListener{
+    private JButton start;
+    private Timer timer; 
+    private Square s1=new Square(this);                     // I initialized square 1 and assign to s1.//
+    private Square2 s2=new Square2(this);                   // I initialized square 2 and assign to s2//
+    private TimeTable tt1=new TimeTable();                  // I initialized timetable and assign to tt1//
+    private JLabel time;
+    
+public void paint(Graphics g){
+  
+    		super.paint(g);
+                                                                      
+			g.setColor(s1.getC());                                 // Painting color of square1.//
+			g.fillRect(s1.getX(),s1.getY(),s1.getE(),s1.getE());   // Drawing square 1 with using x,y,e values.//
+    
+
+            g.setColor(s2.getC());                                // Painting color of square2.//
+			g.fillRect(s2.getX(),s2.getY(),s2.getE(),s2.getE());  // Drawing square 2 with using x,y,e values.//
+
+}			
+public Turin ()	{
+	
+	time=new JLabel("0");           // I initialized JLabel time which shows counter.//
+	time.setSize(20,20);           // I set size of time label.//
+    time.setLocation(145,100);     // I adjusted location of time label.// 
+    add(time);
+     
+    
+     setLayout(null);             // I used null layout.//
+     setSize(300, 300);           // I set size of JFrame.//
+     setTitle("Gurur");           // I set title of my frame.//
+     setVisible(true); 
+     setDefaultCloseOperation(EXIT_ON_CLOSE);
+ 
+    timer= new Timer(100, this);    // I initialized timer.//
+
+     start=new JButton("Start");    // I initialized Start button.//
+     start.setSize(90,40);          // I set size of Start button.//
+     start.setLocation(100,45);     // I set location of Start button.//
+     add(start);
+     start.addActionListener(this);
+
+    }
+                      
+    public static void main(String[] args) {
+        new Turin();
+    }
+         
+    public void actionPerformed(ActionEvent e) {
+       Thread t2=new Thread(s1);             // I created thread t2 because of using run method inside of s1.Behavior of square 1//
+       Thread t3=new Thread(s2);             // I created thread t3 because of using run method inside of s2.Behavior of square 2//
+       Thread t4=new Thread(tt1);            // I created thread t4 because of using run method inside of tt1.Behavior of counter//
+        if(e.getSource().equals(start)){     
+                  timer.start();             // If you click start button animaton starts.//
+                        }
+      
+        else if(e.getSource().equals(timer)){  
+        	if(!s1.getC().equals(s2.getC())){  // If two squares' color is not equal change their color.//
+             	
+        		 try {
+        			 
+       	           java.lang.Thread.sleep(1000);   // I wrote this code to see color of squares clearly.//
+       	          
+       	        } catch (InterruptedException ex) {
+       	            Logger.getLogger(Square2.class.getName()).log(Level.SEVERE, null, ex);
+       	        }
+        	                    t2.start();    // Starting of t2 thread.//
+        	                    t3.start();    // Starting of t3 thread.//
+        	                    t4.start();     // Starting of t4 thread.//
+                                time.setText(tt1.getStarting()+"");  // This operation set text of label with value which is taken by tt1.get.Starting method.//
+        	                    repaint();      
+                  }
+        	else {
+
+                timer.stop();             // If two squares' color is equal. Stop the animation and give message.//
+                JOptionPane.showMessageDialog(this, tt1.getStarting()+" seconds!");
+
+             }
+         
+                 
+             }
+                
+        }
+} 
+
+        
+
+
+       
+   
+                 
+                          
+    
